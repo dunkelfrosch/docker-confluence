@@ -1,0 +1,29 @@
+#
+# our confluence core service container
+#
+confluence:
+  restart: 'always'
+  images: df/atls-confluence
+
+  ports:
+    - "8090:8090"
+
+  volumes_from:
+    - confluence_data:rw
+
+  privileged: false
+  stdin_open: true
+  tty: true
+
+#
+# our confluence data-only container
+#
+confluence_data:
+  restart: 'no'
+  images: df/atls-confluence
+
+  privileged: false
+  stdin_open: false
+  tty: false
+
+  entrypoint: /bin/echo "data-only container for confluence"

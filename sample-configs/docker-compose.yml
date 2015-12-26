@@ -1,0 +1,14 @@
+#
+# our confluence service container
+#
+confluence:
+  restart: 'always'
+  images: df/atls-confluence
+  container_name: df-atls-confluence
+
+  ports:
+    - "8090:8090"
+
+  privileged: false
+  stdin_open: true
+  tty: true

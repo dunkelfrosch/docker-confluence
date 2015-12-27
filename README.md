@@ -5,9 +5,8 @@
 this repository provide the currently latest version of Atlassians collaboration software [confluence](https://de.atlassian.com/software/confluence) including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based confluence installation. Take note, that this repository will be used inside our docker atlassian application workbench sources (also available on Github as soon as our documentation stands stable and "readable"). *In this workbench we've combine additional atlassian products (jira, confluence and bitbucket) using advanced docker features like docker-compose based service management, data-container, links … etc*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
-[![System Version](https://img.shields.io/badge/version-0.9.6%20alpha-red.svg)](VERSION)
-[![System State](https://img.shields.io/badge/state-initial%20build-red.svg)](STATE)
-
+[![System Version](https://img.shields.io/badge/version-0.9.7-blue.svg)](VERSION)
+[![Build Status](https://travis-ci.org/dunkelfrosch/docker-confluence.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-confluence)
 
 ## Preparation
 we recommended the usage of the latest version docker and for simple system integration/supervision docker's "in-house" application docker-compose.

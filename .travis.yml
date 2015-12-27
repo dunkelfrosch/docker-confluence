@@ -17,4 +17,4 @@ script:
   - docker run --name df_confluence -d -p 127.0.0.1:8090:8090 df/confluence:5.9.2
   - docker ps | grep "df_confluence"
   - docker logs df_confluence
-  
+  - docker ps -aq | xargs sudo docker rm

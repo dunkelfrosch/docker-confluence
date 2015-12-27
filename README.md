@@ -22,52 +22,52 @@ MySQL container configuration inside this documentation beside a docker-compose 
 ## Installation-Method 1, docker direct mode
 as long as our image isn't available via docker.io hub repository, you've to build it by yourself using this github repository. this steps will show you the generic, pure docker based installation of our confluence image container, without any database container linked or data-container feature.  *We also will provide a docker-compose based installation in this documentation*.
 
-1. checkout this repository
+1) checkout this repository
 
 ```bash
 git clone https://github.com/dunkelfrosch/docker-confluence.git .
 ```
 
-2. build confluence (version 5.9.2) image on your local docker host, naming image "df/confluence:5.9.2"
+2) build confluence (version 5.9.2) image on your local docker host, naming image "df/confluence:5.9.2"
 
 ```bash
 docker build -t df/confluence:5.9.2
 ```
 
-3. start your new confluence application container
+3) start your new confluence application container
 
 ```bash
 docker run -d -p 8090:8090 df/confluence 
 ```
 	
-4. finish your installation using atlassian's browser based configuration 
+4) finish your installation using atlassian's browser based configuration 
 just navigate to `http://[dockerhost]:8090` 
 
 
 ## Installation-Method 2, docker-compose (simple)
 this steps will show you an alternative way of confluence service container installation using docker-compose
 
-1. checkout this repository
+1) checkout this repository
 
 ```bash
 git clone https://github.com/dunkelfrosch/docker-confluence.git .
 ```
 
-2. create a docker-compose.yml file in your target directory (or using the existing one), insert the following lines (docker-compose.yml in ./sample-configs/ directory). 
+2) create a docker-compose.yml file in your target directory (or using the existing one), insert the following lines (docker-compose.yml in ./sample-configs/ directory). 
 
 ![](https://dl.dropbox.com/s/hqm039menqoxejc/dc_setup_001.png)
 
-3. start your confluence container by docker-compose
+3) start your confluence container by docker-compose
 
 ```bash
 docker-compose up -d confluence
 ```
 
-4. (optional) rename the resulting image after successful build (we'll use our image auto-name result here)
+4) (optional) rename the resulting image after successful build (we'll use our image auto-name result here)
 ```bash
 docker tag dfdockerconfluence_confluence df/confluence:5.9.2
 ```
-5. the result should by a running container and an available local confluence image
+5) the result should by a running container and an available local confluence image
 
 ![](https://dl.dropbox.com/s/y02m1k781u83mfl/dc_result_001.png)
 

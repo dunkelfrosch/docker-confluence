@@ -1,9 +1,16 @@
 #
-# our confluence core service container
+# copy this file to your source root and execute: 'docker-compose -d -up confluence'
+# inside your terminal.
+#
+# our confluence core service container using a "shadow copy" of path defined in VOLUMES
+# section from another "data-only" container. this metod provide an additional protection
+# for container running in production systems, prevent data-loss if deleted main core
+# container accidentally.
 #
 confluence:
   restart: 'always'
-  images: df/atls-confluence
+  # image: df/atls-confluence
+  build: .
 
   ports:
     - "8090:8090"
@@ -20,7 +27,8 @@ confluence:
 #
 confluence_data:
   restart: 'no'
-  images: df/atls-confluence
+  # image: df/atls-confluence
+  build: .
 
   privileged: false
   stdin_open: false

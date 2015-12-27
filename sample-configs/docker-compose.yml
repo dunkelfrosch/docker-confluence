@@ -1,9 +1,13 @@
 #
+# copy this file to your source root and execute: 'docker-compose -d -up confluence'
+# inside your terminal.
+#
 # our confluence service container
 #
 confluence:
   restart: 'always'
-  images: df/atls-confluence
+  # image: df/atls-confluence
+  build: .
   container_name: df-atls-confluence
 
   ports:

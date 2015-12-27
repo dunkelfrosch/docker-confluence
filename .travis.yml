@@ -1,0 +1,20 @@
+sudo: required
+
+env:
+  COMPOSE_VERSION: 1.5.2
+
+services:
+  - docker
+
+before_install:
+  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+script:
+  # check normal docker build
+  - docker build -t df/confluence:5.9.2 .
+  - docker run --name df_confluence -d -p 127.0.0.1:8090:8090 df/confluence:5.9.2
+  - docker ps | grep "df_confluence"
+  - docker logs df_confluence
+  

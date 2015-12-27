@@ -53,9 +53,9 @@ this steps will show you an alternative way of confluence service container inst
 git clone https://github.com/dunkelfrosch/docker-confluence.git .
 ```
 
-2. create a docker-compose.yml file in your target directory, insert the following lines (docker-compose.yml in ./sample-configs/ directory). 
+2. create a docker-compose.yml file in your target directory (or using the existing one), insert the following lines (docker-compose.yml in ./sample-configs/ directory). 
 
-![](https://dl.dropbox.com/s/3qgpp5qf91l6tg3/dc_setup_002.png)
+![](https://dl.dropbox.com/s/hqm039menqoxejc/dc_setup_001.png)
 
 3. start your confluence container by docker-compose
 

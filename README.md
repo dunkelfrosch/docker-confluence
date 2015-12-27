@@ -2,11 +2,12 @@
 
 *this documentation isn't finally done yet - we still working on major and minor issues corresponding to this repository base!*
 
-this repository provide the currently latest version of Atlassians collaboration software [confluence](https://de.atlassian.com/software/confluence) including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based confluence installation. Take note, that this repository will be used inside our docker atlassian application workbench sources (also available on Github as soon as our documentation stands stable and "readable"). *In this workbench we've combine additional atlassian products (jira, confluence and bitbucket) using advanced docker features like docker-compose based service management, data-container, links* …
+this repository provide the currently latest version of Atlassians collaboration software [confluence](https://de.atlassian.com/software/confluence) including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based confluence installation. Take note, that this repository will be used inside our docker atlassian application workbench sources (also available on Github as soon as our documentation stands stable and "readable"). *In this workbench we've combine additional atlassian products (jira, confluence and bitbucket) using advanced docker features like docker-compose based service management, data-container, links … etc*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![System Version](https://img.shields.io/badge/version-0.9.6%20alpha-red.svg)](VERSION)
 [![System State](https://img.shields.io/badge/state-initial%20build-red.svg)](STATE)
+
 
 ## Preparation
 we recommended the usage of the latest version docker and for simple system integration/supervision docker's "in-house" application docker-compose.
@@ -18,12 +19,17 @@ MySQL container configuration inside this documentation beside a docker-compose 
 [docker-compose installation guide](https://docs.docker.com/compose/install/)</br>
 [docker machine installation guide](https://docs.docker.com/machine/install-machine/)</br>
 
-## Installation, Method 1
-this steps will show you the generic, pure docker based installation of our confluence image container, without any database container linked or data-container feature.  *We also will provide a docker-compose based installation in this documentation*.
+
+## Installation-Method 1, docker direct mode
+as long as our image isn't available via docker.io hub repository, you've to build it by yourself using this github repository. this steps will show you the generic, pure docker based installation of our confluence image container, without any database container linked or data-container feature.  *We also will provide a docker-compose based installation in this documentation*.
 
 1. checkout this repository
 
-2. build confluence (version 5.9.2) image on your local docker host
+```bash
+git clone https://github.com/dunkelfrosch/docker-confluence.git .
+```
+
+2. build confluence (version 5.9.2) image on your local docker host, naming image "df/confluence:5.9.2"
 
 ```bash
 docker build -t df/confluence:5.9.2
@@ -38,10 +44,15 @@ docker run -d -p 8090:8090 df/confluence
 4. finish your installation using atlassian's browser based configuration 
 just navigate to `http://[dockerhost]:8090` 
 
-## Installation, Method 2
+
+## Installation-Method 2, docker-compose (simple)
 this steps will show you an alternative way of confluence service container installation using docker-compose
 
 1. checkout this repository
+
+```bash
+git clone https://github.com/dunkelfrosch/docker-confluence.git .
+```
 
 2. create a docker-compose.yml file in your target directory, insert the following lines (docker-compose.yml in ./sample-configs/ directory). 
 
@@ -53,7 +64,40 @@ this steps will show you an alternative way of confluence service container inst
 docker-compose up -d confluence
 ```
 
-4. ... *more steps … after x-mass ;)*
+4. (optional) rename the resulting image after successful build (we'll use our image auto-name result here)
+```bash
+docker tag dfdockerconfluence_confluence df/confluence:5.9.2
+```
+5. the result should by a running container and an available local confluence image
+
+![](https://dl.dropbox.com/s/y02m1k781u83mfl/dc_result_001.png)
+
+## Installation-Method 3, docker-compose (using db)
+confluence needs a relational db and may feel more self-confident using data-only container features. Take a look inside your *./sample-config* path, we've provide a few sample docker-compose yaml config files to show you those feature implementations.
+
+./sample-configs/**docker-compose-dc.yml**
+> sample configuration for data-container feature
+
+./sample-configs/**docker-compose-linkdb.yml**
+> sample configuration for linking mysql container directly
+
+## container access and maintenance
+you can check container health by accessing logs of inner tomcat/confluence processes directly as long as the container is still running. as you can see in this screenshot, atlassian confluence was starting successfully (*we've to ignore some by-side warnings ;)* )
+
+```bash
+docker logs df-atls-confluence
+```
+
+![](https://dl.dropbox.com/s/dkn42evdreynvfh/dc_logs_001.png)
+
+you can login easily to your running confluence container to take a deeper look in your confluence service process. *this confluence build provide midnight-commander as terminal extension accessable typing "mc" in your container session shell*.
+
+```bash
+docker exec -it --user root df-atls-confluence /bin/bash
+```
+
+![](https://dl.dropbox.com/s/sws4yq2znhil9n6/dc_confluence_terminal_002.png)
+
 
 ## Contribute
 

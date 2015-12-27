@@ -100,7 +100,7 @@ docker exec -it --user root df-atls-confluence /bin/bash
 
 ## Contribute
 
-DockerConfluence is still under development and contributors are always welcome! Feel free to join our docker-confluecne distributor team. Please refer to [CONTRIBUTING.md](https://github.com/dunkelfrosch/dfdockerconfluence/blob/master/CONTRIBUTING.md) and find out how to contribute to this Project.
+DockerConfluence is still under development and contributors are always welcome! Feel free to join our docker-confluence distributor team. Please refer to [CONTRIBUTING.md](https://github.com/dunkelfrosch/dfdockerconfluence/blob/master/CONTRIBUTING.md) and find out how to contribute to this Project.
 
 
 ## License-Term

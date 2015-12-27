@@ -3,7 +3,7 @@
 # OS/CORE  : java:8-jdk
 # SERVICES : ntp, ...
 #
-# VERSION 0.9.6
+# VERSION 0.9.7
 #
 
 FROM java:8
@@ -13,7 +13,7 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/confluence" \
       com.container.priority="1" \
       com.container.project="confluence" \
-      img.version="0.9.6" \
+      img.version="0.9.7" \
       img.description="atlassian confluence application container"
 
 # Setup base environment variables
@@ -58,7 +58,7 @@ RUN set -e \
     && dpkg-reconfigure tzdata >/dev/null 2>&1
 
 #
-# -> if you're running this jira container outside a workbench scenario, you
+# -> if you're running this confluence container outside a workbench scenario, you
 #    can activate VOLUME feature ...
 #
 # Set volume mount points for installation and home directory. Changes to the

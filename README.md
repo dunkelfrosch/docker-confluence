@@ -6,7 +6,7 @@ This repository provides the latest version of Atlassians collaboration software
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![System Version](https://img.shields.io/badge/version-0.9.7-blue.svg)](VERSION)
-[![Build Status](https://travis-ci.org/dunkelfrosch/docker-Confluence.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-Confluence)
+[![Build Status](https://api.travis-ci.org/dunkelfrosch/docker-confluence.svg?branch=master)](STATUS)
 
 ## Preparation
 We recommend the [latest Docker version](https://github.com/docker/docker/blob/master/CHANGELOG.md).  For simple system integration and supervision we suggest [Docker Compose](https://docs.docker.com/compose/install/). If you're using MacOS or Windows as host operating system, you may take the advantage of [Docker Machine](https://www.docker.com/docker-machine) for Docker's VM management. Confluence requires a relational database like MySQL or PostgreSQL, so we'll provide a specific Docker Compose configuration file to showcase both a Confluence-MySQL link and a data-container feature configuration. Use the installation guides of provided links down below to comply your Docker preparation process.
@@ -47,7 +47,7 @@ The following steps will show you an alternative way of Confluence service conta
 1) checkout this repository
 
 ```bash
-git clone https://github.com/dunkelfrosch/docker-Confluence.git .
+git clone https://github.com/dunkelfrosch/docker-confluence.git .
 ```
 
 2) create a docker-compose.yml file in your target directory (or use the existing one), afterwards insert the following lines (docker-compose.yml in *./sample-configs/* directory). 
@@ -57,13 +57,13 @@ git clone https://github.com/dunkelfrosch/docker-Confluence.git .
 3) start your Confluence container by docker-compose
 
 ```bash
-docker-compose up -d Confluence
+docker-compose up -d confluence
 ```
 
 4) (optional) rename the resulting image after successful build (we'll use our image auto-name result here)
 
 ```bash
-docker tag dfdockerConfluence_Confluence df/Confluence:5.9.2
+docker tag dfdockerconfluence_confluence df/confluence:5.9.2
 ```
 
 5) the result should be a running container and an available local Confluence image
@@ -83,7 +83,7 @@ Confluence needs a relational DB and for safety reasons we suggest using data-on
 You can check container health by accessing logs of inner tomcat/Confluence processes directly as long as the container is still running. As you can see in this screenshot, Atlassian Confluence was starting successfully (*Let's ignore some minor warnings ;)* )
 
 ```bash
-docker logs df-atls-Confluence
+docker logs df-atls-confluence
 ```
 
 ![](https://dl.dropbox.com/s/dkn42evdreynvfh/dc_logs_001.png)
@@ -91,10 +91,10 @@ docker logs df-atls-Confluence
 You can log in easily to your running Confluence container to take a deeper look in your Confluence service process. *This Confluence build provides midnight-commander as terminal extension accessible typing "mc" in your container session shell*.
 
 ```bash
-docker exec -it --user root df-atls-Confluence /bin/bash
+docker exec -it --user root df-atls-confluence /bin/bash
 ```
 
-![](https://dl.dropbox.com/s/sws4yq2znhil9n6/dc_Confluence_terminal_002.png)
+![](https://dl.dropbox.com/s/sws4yq2znhil9n6/dc_confluence_terminal_002.png)
 
 
 ## Contribute

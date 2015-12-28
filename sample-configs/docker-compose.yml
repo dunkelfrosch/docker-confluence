@@ -6,7 +6,7 @@
 #
 confluence:
   restart: 'always'
-  # image: df/atls-confluence
+  # image: df/dunkelfrosch-confluence
   build: .
   container_name: df-atls-confluence
 

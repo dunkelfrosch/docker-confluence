@@ -13,8 +13,8 @@ before_install:
 
 script:
   # check normal docker build
-  - docker build -t df/confluence:5.9.2 .
-  - docker run --name df_confluence -d -p 127.0.0.1:8090:8090 df/confluence:5.9.2
+  - docker build -t dunkelfrosch/confluence:5.9.2 .
+  - docker run --name df_confluence -d -p 127.0.0.1:8090:8090 dunkelfrosch/confluence:5.9.2
   - docker ps | grep "df_confluence"
   - docker logs df_confluence
   - docker ps -aq | xargs sudo docker rm -f

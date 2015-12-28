@@ -9,7 +9,7 @@
 #
 confluence:
   restart: 'always'
-  # image: df/atls-confluence
+  # image: dunkelfrosch/confluence
   build: .
 
   ports:
@@ -27,7 +27,7 @@ confluence:
 #
 confluence_data:
   restart: 'no'
-  # image: df/atls-confluence
+  # image: dunkelfrosch/confluence
   build: .
 
   privileged: false

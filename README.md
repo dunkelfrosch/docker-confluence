@@ -25,16 +25,16 @@ As long as our image isn't available via docker.io hub repository, you will need
 git clone https://github.com/dunkelfrosch/docker-confluence.git .
 ```
 
-2) build Confluence (version 5.9.2) image on your local Docker host, naming image "df/confluence:5.9.2"
+2) build Confluence (version 5.9.2) image on your local Docker host, naming image "dunkelfrosch/confluence:5.9.2"
 
 ```bash
-docker build -t df/confluence:5.9.2
+docker build -t dunkelfrosch/confluence:5.9.2
 ```
 
 3) start your new Confluence application container
 
 ```bash
-docker run -d -p 8090:8090 df/confluence 
+docker run -d -p 8090:8090 dunkelfrosch/confluence 
 ```
 	
 4) to finish your installation using Atlassian's browser based configuration 
@@ -63,7 +63,7 @@ docker-compose up -d confluence
 4) (*optional*) rename the resulting image after successful build (we'll use our image auto-name result here)
 
 ```bash
-docker tag dfdockerconfluence_confluence df/confluence:5.9.2
+docker tag dfdockerconfluence_confluence dunkelfrosch/confluence:5.9.2
 ```
 
 5) the result should be a running container and an available local Confluence image

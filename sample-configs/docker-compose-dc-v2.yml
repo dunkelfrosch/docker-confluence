@@ -1,0 +1,48 @@
+#
+# this version of docker-compose can only be used up to version 1.6.n of docker-compose (docker 1.10.n+)
+#
+# copy this file to your source root and execute: 'docker-compose up -d confluence'
+# inside your terminal.
+#
+# our confluence core service container using a "shadow copy" of path defined in VOLUMES
+# section from another "data-only" container. this metod provide an additional protection
+# for container running in production systems, prevent data-loss if deleted main core
+# container accidentally.
+#
+version: '2'
+services:
+  confluence:
+    restart: 'always'
+    # image: dunkelfrosch/confluence:latest
+    build:
+      context: .
+
+    container_name: df-atls-confluence
+
+    ports:
+      - "8090:8090"
+
+    volumes_from:
+      - confluence_data:rw
+
+    privileged: false
+    stdin_open: true
+    tty: true
+
+    depends_on:
+      - confluence_data
+
+  #
+  # our confluence data-only container
+  #
+  confluence_data:
+    restart: 'no'
+    # image: dunkelfrosch/confluence:latest
+    build:
+      context: .
+
+    privileged: false
+    stdin_open: false
+    tty: false
+
+    entrypoint: /bin/echo "data-only container for confluence"

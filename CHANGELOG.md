@@ -10,11 +10,13 @@ _current_
 ### Added
 - new sample files for docker compose format v2 (1.6.n)
 - new mysql config to provide utf8 compatibility for confluence
+- travis ci command, remove latest image build
 
 ### Changes
 - upgrade confluence to version 5.9.5
 - minor issues in docker-compose file definition
 - fix documentation issue in docker-compose sample files
+
 
 ## [0.9.8], 2015-12-29:
 

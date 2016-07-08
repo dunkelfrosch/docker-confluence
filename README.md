@@ -1,11 +1,11 @@
-# Docker Image for Atlassian Confluence 5.9.5
+# Docker Image for Atlassian Confluence 5.10.1
 
 *this documentation isn't fully done yet - we're still working on major and minor issues corresponding to this repository base!*
 
 This repository provides the latest version of Atlassians collaboration software [Confluence](https://de.atlassian.com/software/confluence) including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based Confluence installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on [Github](https://github.com/dunkelfrosch/docker-atlassian-wb) as soon as documentation is completed. *In this workbench we've combined several Atlassian products (Confluence, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
-[![System Version](https://img.shields.io/badge/version-0.9.9-blue.svg)](VERSION)
+[![System Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](VERSION)
 [![Build Status](https://api.travis-ci.org/dunkelfrosch/docker-confluence.svg?branch=master)](STATUS)
 
 ## Preparation
@@ -25,15 +25,13 @@ These steps will show you the generic, pure docker-based installation of Atlassi
 git clone https://github.com/dunkelfrosch/docker-confluence.git .
 ```
 
-2.1) build your Confluence image (version 5.9.5) on your local docker host, naming image "dunkelfrosch/confluence:5.9.5"
+2.1) build your Confluence image (version 5.10.1) on your local docker host, naming image "dunkelfrosch/confluence:5.10.1"
 
 ```bash
-docker build -t dunkelfrosch/confluence:5.9.5
+docker build -t dunkelfrosch/confluence:5.10.1
 ```
 
 2.2) pull our compiled Confluence image from docker-hub directly by activating the corresponding lines in our docker-compose.yml file below the "restart: always" line: "image: df/dunkelfrosch-confluence"
-
-*take note, that the currently available image version of confluence on docker hub is still 5.9.3, we'll push the latest versions in the next few days*
 
 
 3) start your new confluence application container
@@ -71,7 +69,7 @@ docker-compose up -d confluence
 4) (*optional*) rename the resulting image after successful build (we'll use our image auto-name result here)
 
 ```bash
-docker tag dfdockerconfluence_confluence dunkelfrosch/confluence:5.9.5
+docker tag dfdockerconfluence_confluence dunkelfrosch/confluence:5.10.1
 ```
 
 5) the result should by a running container and an available local Confluence image

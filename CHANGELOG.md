@@ -1,11 +1,16 @@
-# ChangeLog of DockerConfluence 0.9.9
+# ChangeLog of DockerConfluence 1.0.0
 
 All notable changes of the DockerConfluence release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 _This DockerConfluence changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [0.9.9], 2015-02-21:
+## [1.0.0], 2015-07-08:
 _current_
+
+### Changes
+- upgrade confluence to version 5.10.1
+
+## [0.9.9], 2015-02-21:
 
 ### Added
 - new sample files for docker compose format v2 (1.6.n)

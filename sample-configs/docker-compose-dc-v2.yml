@@ -13,7 +13,7 @@ version: '2'
 services:
   confluence:
     restart: 'always'
-    # image: dunkelfrosch/confluence:latest
+    # image: dunkelfrosch/confluence
     build:
       context: .
 
@@ -37,7 +37,7 @@ services:
   #
   confluence_data:
     restart: 'no'
-    # image: dunkelfrosch/confluence:latest
+    # image: dunkelfrosch/confluence
     build:
       context: .
 

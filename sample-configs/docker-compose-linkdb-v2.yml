@@ -18,7 +18,7 @@ version: '2'
 services:
   confluence:
     restart: 'always'
-    # image: dunkelfrosch/confluence:latest
+    # image: dunkelfrosch/confluence
     build:
       context: .
 

@@ -6,7 +6,7 @@ This repository provides the latest version of Atlassians collaboration software
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![System Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](VERSION)
-[![Build Status](https://api.travis-ci.org/dunkelfrosch/docker-confluence.svg?branch=master)](STATUS)
+[![Build Status](https://api.travis-ci.org/dunkelfrosch/docker-confluence.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-confluence)
 
 ## Preparation
 We recommend the [latest Docker version](https://github.com/docker/docker/blob/master/CHANGELOG.md). For simple system integration and supervision we suggest [Docker Compose](https://docs.docker.com/compose/install/). If you're using MacOS or Windows as host operating system, you may take the advantage of [Docker Machine](https://www.docker.com/docker-machine) for Docker's VM management. Confluence requires a relational database like MySQL or PostgreSQL, so we'll provide a specific Docker Compose configuration file to showcase both a Confluence-MySQL link and a data-container feature configuration. Use the installation guides of provided links down below to comply your Docker preparation process.

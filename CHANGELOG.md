@@ -4,8 +4,14 @@ All notable changes of the DockerConfluence release series are documented in thi
 
 _This DockerConfluence changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [1.0.0], 2015-07-08:
+## [1.0.1], 2017-01-21:
 _current_
+
+### Changes
+- upgrade confluence to version 6.0.4
+
+
+## [1.0.0], 2015-07-08:
 
 ### Changes
 - upgrade confluence to version 5.10.1

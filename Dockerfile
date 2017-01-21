@@ -66,7 +66,7 @@ RUN set -e \
 # home directory needs to be persisted as well as parts of the installation
 # directory (accessing logs). These directories will be set-and-used during
 # data-only container volume bound run-mode.
-VOLUME ["${CONFLUENCE_INSTALL}", "${CONFLUENCE_HOME}"]
+# VOLUME ["${CONFLUENCE_INSTALL}", "${CONFLUENCE_HOME}"]
 
 # Expose default HTTP connector port.
 EXPOSE 8090

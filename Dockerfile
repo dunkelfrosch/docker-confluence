@@ -11,6 +11,7 @@ FROM java:8
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/confluence" \
+      com.container.service.version="6.0.4" \
       com.container.priority="1" \
       com.container.project="confluence" \
       img.version="1.0.0" \
@@ -23,7 +24,7 @@ ENV DEBIAN_FRONTEND         noninteractive
 ENV TIMEZONE                "Europe/Berlin"
 
 # Setup application install environment variables
-ENV CONFLUENCE_VERSION      5.10.1
+ENV CONFLUENCE_VERSION      6.0.4
 ENV CONFLUENCE_HOME         "/var/atlassian/confluence"
 ENV CONFLUENCE_INSTALL      "/opt/atlassian/confluence"
 ENV DOWNLOAD_URL            "http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-"
@@ -65,7 +66,7 @@ RUN set -e \
 # home directory needs to be persisted as well as parts of the installation
 # directory (accessing logs). These directories will be set-and-used during
 # data-only container volume bound run-mode.
-# VOLUME ["${CONFLUENCE_INSTALL}", "${CONFLUENCE_HOME}"]
+VOLUME ["${CONFLUENCE_INSTALL}", "${CONFLUENCE_HOME}"]
 
 # Expose default HTTP connector port.
 EXPOSE 8090

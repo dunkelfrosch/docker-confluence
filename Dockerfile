@@ -35,7 +35,7 @@ ENV TERM="xterm" \
 RUN set -e \
     && apt-get update -qq \
     && apt-get install -qq -y --no-install-recommends software-properties-common debconf-utils libtcnative-1 xmlstarlet mc liblucene2-java ntp \
-    && add-apt-repository "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main"
+    && add-apt-repository "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" \
     && apt-get update -qq \
     && echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
     && echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections \

@@ -3,7 +3,7 @@
 # OS/CORE  : java:8-jdk
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.0
+# VERSION 1.0.2
 #
 
 FROM java:8
@@ -11,10 +11,10 @@ FROM java:8
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/confluence" \
-      com.container.service.version="6.0.4" \
+      com.container.service.version="6.2.3" \
       com.container.priority="1" \
       com.container.project="confluence" \
-      img.version="1.0.0" \
+      img.version="1.0.2" \
       img.description="atlassian confluence application container"
 
 # Setup base environment variables
@@ -24,7 +24,7 @@ ENV DEBIAN_FRONTEND         noninteractive
 ENV TIMEZONE                "Europe/Berlin"
 
 # Setup application install environment variables
-ENV CONFLUENCE_VERSION      6.0.4
+ENV CONFLUENCE_VERSION      6.2.3
 ENV CONFLUENCE_HOME         "/var/atlassian/confluence"
 ENV CONFLUENCE_INSTALL      "/opt/atlassian/confluence"
 ENV DOWNLOAD_URL            "http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-"

@@ -17,22 +17,19 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       img.version="1.0.2" \
       img.description="atlassian confluence application container"
 
-# Setup base environment variables
-ENV TERM                    xterm
-ENV LC_ALL                  C.UTF-8
-ENV DEBIAN_FRONTEND         noninteractive
-ENV TIMEZONE                "Europe/Berlin"
-
-# Setup application install environment variables
-ENV CONFLUENCE_VERSION      6.2.3
-ENV CONFLUENCE_HOME         "/var/atlassian/confluence"
-ENV CONFLUENCE_INSTALL      "/opt/atlassian/confluence"
-ENV DOWNLOAD_URL            "http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-"
-ENV JVM_MYSQL_CONNECTOR_URL "http://dev.mysql.com/get/Downloads/Connector-J"
-ENV JVM_MYSQL_CONNETOR      "mysql-connector-java-5.1.36"
-ENV JAVA_HOME               "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
-ENV RUN_USER                daemon
-ENV RUN_GROUP               daemon
+ENV TERM="xterm" \
+    LC_ALL="C.UTF-8" \
+    DEBIAN_FRONTEND="noninteractive" \
+    TIMEZONE="Europe/Berlin" \
+    CONFLUENCE_VERSION="6.2.3" \
+    CONFLUENCE_HOME="/var/atlassian/confluence" \
+    CONFLUENCE_INSTALL="/opt/atlassian/confluence" \
+    DOWNLOAD_URL="http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-" \
+    JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
+    JVM_MYSQL_CONNETOR="mysql-connector-java-5.1.36" \
+    JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64" \
+    RUN_USER="daemon" \
+    RUN_GROUP="daemon"
 
 # x-layer 1: package manager related processor
 RUN set -e \

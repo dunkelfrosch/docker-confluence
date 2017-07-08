@@ -10,6 +10,9 @@ _current_
 ### Changes
 - upgrade confluence to version 6.2.3
 
+### Fixes
+- fix an issue with current java 8 sdk, using oracle sdk now
+
 ## [1.0.1], 2017-01-21:
 
 ### Changes

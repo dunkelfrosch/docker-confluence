@@ -39,7 +39,7 @@ RUN set -e \
     && apt-get update -qq \
     && echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
     && echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections \
-    && apt-get install -qq -y oracle-java8-installer \
+    && apt-get install -qq -y oracle-java8-installer oracle-java8-set-default \
     && apt-get clean autoclean \
     && apt-get autoremove -y \
     && rm -rf /var/lib/cache /var/lib/log /tmp/* /var/tmp/*

@@ -3,7 +3,7 @@
 # OS/CORE  : java:8-jdk
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.2
+# VERSION 1.0.3
 #
 
 FROM java:8
@@ -14,19 +14,19 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service.version="6.2.3" \
       com.container.priority="1" \
       com.container.project="confluence" \
-      img.version="1.0.2" \
+      img.version="1.0.3" \
       img.description="atlassian confluence application container"
 
 ENV TERM="xterm" \
     LC_ALL="C.UTF-8" \
     DEBIAN_FRONTEND="noninteractive" \
     TIMEZONE="Europe/Berlin" \
-    CONFLUENCE_VERSION="6.2.3" \
+    CONFLUENCE_VERSION="6.8.1" \
     CONFLUENCE_HOME="/var/atlassian/confluence" \
     CONFLUENCE_INSTALL="/opt/atlassian/confluence" \
     DOWNLOAD_URL="http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-" \
     JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
-    JVM_MYSQL_CONNETOR="mysql-connector-java-5.1.36" \
+    JVM_MYSQL_CONNETOR="mysql-connector-java-5.1.46" \
     JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64" \
     RUN_USER="daemon" \
     RUN_GROUP="daemon"

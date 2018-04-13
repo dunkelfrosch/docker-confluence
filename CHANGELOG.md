@@ -4,11 +4,13 @@ All notable changes of the DockerConfluence release series are documented in thi
 
 _This DockerConfluence changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [1.0.3], 2018-04-013:
+## [1.0.3], 2018-04-13:
 _current_
 
 ### Changes
 - upgrade confluence to version 6.8.1
+- upgrade mysql connector to version 5.1.46
+- move from debian:jdk8 base image to openjdk:8-jdk-alpine
 
 ### Fixes
 - minor documentation issues
@@ -18,7 +20,6 @@ _current_
 
 ### Changes
 - upgrade confluence to version 6.2.3
-- upgrade mysql connector to version 5.1.46
 
 ### Fixes
 - fix an issue with current java 8 sdk, using oracle sdk now

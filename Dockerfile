@@ -3,7 +3,7 @@
 # OS/CORE  : dunkelfrosch/alpine-jdk8
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.4
+# VERSION 1.0.5
 #
 
 FROM dunkelfrosch/alpine-jdk8
@@ -13,7 +13,7 @@ LABEL maintainer="Patrick Paechnatz <patrick.paechnatz@gmail.com>" \
       com.container.service="atlassian/confluence" \
       com.container.priority="1" \
       com.container.project="confluence" \
-      img.version="1.0.4" \
+      img.version="1.0.5" \
       img.description="atlassian confluence application container"
 
 ARG ISO_LANGUAGE=en
@@ -23,7 +23,6 @@ ARG MYSQL_CONNECTOR_VERSION=5.1.46
 
 ENV TERM="xterm" \
     TIMEZONE="Europe/Berlin" \
-    LANG="en_US.UTF-8" \
     CONFLUENCE_HOME="/var/atlassian/application-data/confluence" \
     CONFLUENCE_INSTALL_DIR="/opt/atlassian/confluence" \
     CONFLUENCE_DOWNLOAD_URL="http://www.atlassian.com/software/confluence/downloads/binary" \
@@ -93,7 +92,6 @@ RUN set -e && \
     mv /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${CONFLUENCE_INSTALL_DIR}/confluence/WEB-INF/lib && \
     cp -f ${CONFLUENCE_INSTALL_DIR}/confluence/WEB-INF/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${CONFLUENCE_INSTALL_DIR}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
     sed -i -e 's/-Xms\([0-9]\+[kmg]\) -Xmx\([0-9]\+[kmg]\)/-Xms\${JVM_MINIMUM_MEMORY:=\1} -Xmx\${JVM_MAXIMUM_MEMORY:=\2} \${JVM_SUPPORT_RECOMMENDED_ARGS} -Dconfluence.home=\${CONFLUENCE_HOME}/g' ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh && \
-    sed -i -e 's/port="8090"/port="8090" secure="${catalinaConnectorSecure}" scheme="${catalinaConnectorScheme}" proxyName="${catalinaConnectorProxyName}" proxyPort="${catalinaConnectorProxyPort}"/' ${CONFLUENCE_INSTALL_DIR}/conf/server.xml && \
     chown -R ${RUN_USER}:${RUN_GROUP} ${CONFLUENCE_HOME} ${CONFLUENCE_INSTALL_DIR} && \
     chmod -R 700 ${CONFLUENCE_HOME} ${CONFLUENCE_INSTALL_DIR} && \
     apk del ca-certificates wget curl unzip tzdata msttcorefonts-installer

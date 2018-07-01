@@ -36,6 +36,8 @@ COPY scripts/*.sh /usr/bin/
 
 RUN set -e && \
     apk add --update ca-certificates gzip curl tar xmlstarlet msttcorefonts-installer ttf-dejavu fontconfig ghostscript graphviz motif wget tzdata bash && \
+    addgroup -g $RUN_GID $RUN_GROUP && \
+    adduser  -u $RUN_UID -G $RUN_GROUP -h /home/$RUN_USER -s /bin/bash -S $RUN_USER && \
     update-ms-fonts && fc-cache -f && \
     /usr/glibc-compat/bin/localedef -i ${ISO_LANGUAGE}_${ISO_COUNTRY} -f UTF-8 ${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8 && \
     cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
@@ -94,13 +96,11 @@ RUN set -e && \
 # --
 EXPOSE 8090 8091
 
-USER confluence
+USER ${RUN_USER}
 COPY entrypoint.sh /entrypoint.sh
 
 VOLUME ["${CONFLUENCE_HOME}"]
-
 WORKDIR ${CONFLUENCE_HOME}
-
 ENTRYPOINT ["/sbin/tini","--","/entrypoint.sh"]
 
 CMD ["confluence"]

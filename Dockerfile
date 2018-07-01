@@ -3,7 +3,7 @@
 # OS/CORE  : dunkelfrosch/alpine-jdk8
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.5
+# VERSION 1.0.6
 #
 
 FROM dunkelfrosch/alpine-jdk8
@@ -13,12 +13,12 @@ LABEL maintainer="Patrick Paechnatz <patrick.paechnatz@gmail.com>" \
       com.container.service="atlassian/confluence" \
       com.container.priority="1" \
       com.container.project="confluence" \
-      img.version="1.0.5" \
+      img.version="1.0.6" \
       img.description="atlassian confluence application container"
 
 ARG ISO_LANGUAGE=en
 ARG ISO_COUNTRY=US
-ARG CONFLUENCE_VERSION=6.8.1
+ARG CONFLUENCE_VERSION=6.10.0
 ARG MYSQL_CONNECTOR_VERSION=5.1.46
 
 ENV TERM="xterm" \
@@ -27,8 +27,8 @@ ENV TERM="xterm" \
     CONFLUENCE_INSTALL_DIR="/opt/atlassian/confluence" \
     CONFLUENCE_DOWNLOAD_URL="http://www.atlassian.com/software/confluence/downloads/binary" \
     JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
-    RUN_USER="confluence" \
-    RUN_GROUP="confluence" \
+    RUN_USER=confluence \
+    RUN_GROUP=confluence \
     RUN_UID=1000 \
     RUN_GID=1000
 
@@ -45,15 +45,7 @@ RUN set -e && \
 # --
 # download/prepare newest mysql connector
 # --
-RUN set -e && \
-    export CONTAINER_USER=$RUN_USER && \
-    export CONTAINER_GROUP=$RUN_GROUP &&  \
-    addgroup -g ${RUN_GID} ${RUN_GROUP} && \
-    adduser -u ${RUN_UID} \
-            -G ${RUN_GROUP} \
-            -h /home/${RUN_USER} \
-            -s /bin/sh \
-            -S ${RUN_USER}
+
 
 # --
 # download/prepare confluence
@@ -92,9 +84,10 @@ RUN set -e && \
     mv /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${CONFLUENCE_INSTALL_DIR}/confluence/WEB-INF/lib && \
     cp -f ${CONFLUENCE_INSTALL_DIR}/confluence/WEB-INF/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${CONFLUENCE_INSTALL_DIR}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
     sed -i -e 's/-Xms\([0-9]\+[kmg]\) -Xmx\([0-9]\+[kmg]\)/-Xms\${JVM_MINIMUM_MEMORY:=\1} -Xmx\${JVM_MAXIMUM_MEMORY:=\2} \${JVM_SUPPORT_RECOMMENDED_ARGS} -Dconfluence.home=\${CONFLUENCE_HOME}/g' ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh && \
-    chown -R ${RUN_USER}:${RUN_GROUP} ${CONFLUENCE_HOME} ${CONFLUENCE_INSTALL_DIR} && \
+    chown -R ${RUN_USER}:${RUN_GROUP} /var/atlassian ${CONFLUENCE_INSTALL_DIR} && \
     chmod -R 700 ${CONFLUENCE_HOME} ${CONFLUENCE_INSTALL_DIR} && \
-    apk del ca-certificates wget curl unzip tzdata msttcorefonts-installer
+    apk del ca-certificates wget curl unzip tzdata msttcorefonts-installer && \
+    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
 # --
 # define container execution behaviour

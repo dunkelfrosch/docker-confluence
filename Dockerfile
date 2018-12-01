@@ -3,7 +3,7 @@
 # OS/CORE  : dunkelfrosch/alpine-jdk8
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.6
+# VERSION 1.0.5
 #
 
 FROM dunkelfrosch/alpine-jdk8
@@ -13,12 +13,12 @@ LABEL maintainer="Patrick Paechnatz <patrick.paechnatz@gmail.com>" \
       com.container.service="atlassian/confluence" \
       com.container.priority="1" \
       com.container.project="confluence" \
-      img.version="1.0.6" \
+      img.version="1.0.5" \
       img.description="atlassian confluence application container"
 
 ARG ISO_LANGUAGE=en
 ARG ISO_COUNTRY=US
-ARG CONFLUENCE_VERSION=6.10.0
+ARG CONFLUENCE_VERSION=6.12.2
 ARG MYSQL_CONNECTOR_VERSION=5.1.46
 
 ENV TERM="xterm" \

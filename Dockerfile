@@ -1,106 +1,80 @@
 #
 # BUILD    : DF/[ATLASSIAN][CONFLUENCE]
-# OS/CORE  : dunkelfrosch/alpine-jdk8
+# OS/CORE  : blacklabelops/java:server-jre.8.162
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.5
+# VERSION 1.0.6-ext
 #
 
-FROM dunkelfrosch/alpine-jdk8
+FROM blacklabelops/java:server-jre.8.162
 
 LABEL maintainer="Patrick Paechnatz <patrick.paechnatz@gmail.com>" \
       com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/confluence" \
       com.container.priority="1" \
       com.container.project="confluence" \
-      img.version="1.0.5" \
+      img.version="1.0.6" \
       img.description="atlassian confluence application container"
 
-ARG ISO_LANGUAGE=en
-ARG ISO_COUNTRY=US
 ARG CONFLUENCE_VERSION=6.12.2
-ARG MYSQL_CONNECTOR_VERSION=5.1.46
+ARG CONTAINER_UID=1000
+ARG CONTAINER_GID=1000
+ARG BUILD_DATE=undefined
+ARG LANG_LANGUAGE=en
+ARG LANG_COUNTRY=US
 
-ENV TERM="xterm" \
-    TIMEZONE="Europe/Berlin" \
-    CONFLUENCE_HOME="/var/atlassian/application-data/confluence" \
-    CONFLUENCE_INSTALL_DIR="/opt/atlassian/confluence" \
-    CONFLUENCE_DOWNLOAD_URL="http://www.atlassian.com/software/confluence/downloads/binary" \
-    JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
-    RUN_USER=confluence \
-    RUN_GROUP=confluence \
-    RUN_UID=1000 \
-    RUN_GID=1000
+ENV CONF_HOME=/var/atlassian/confluence \
+    CONF_INSTALL=/opt/atlassian/confluence \
+    MYSQL_DRIVER_VERSION=5.1.47
 
-COPY scripts/*.sh /usr/bin/
+RUN mkdir -p ${CONF_HOME} \
+             ${CONF_INSTALL}/conf
 
-RUN set -e && \
-    apk add --update ca-certificates gzip curl tar xmlstarlet msttcorefonts-installer ttf-dejavu fontconfig ghostscript graphviz motif wget tzdata bash && \
-    addgroup -g $RUN_GID $RUN_GROUP && \
-    adduser  -u $RUN_UID -G $RUN_GROUP -h /home/$RUN_USER -s /bin/bash -S $RUN_USER && \
-    update-ms-fonts && fc-cache -f && \
-    /usr/glibc-compat/bin/localedef -i ${ISO_LANGUAGE}_${ISO_COUNTRY} -f UTF-8 ${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8 && \
-    cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
-    echo "${TIMEZONE}" >/etc/timezone && \
-    ln -s /usr/bin/dockerwait.sh /usr/bin/dockerwait
+RUN export CONTAINER_USER=confluence && \
+    export CONTAINER_GROUP=confluence && \
+    addgroup -g $CONTAINER_GID $CONTAINER_GROUP && \
+    adduser  -u $CONTAINER_UID -G $CONTAINER_GROUP -h /home/$CONTAINER_USER -s /bin/bash -S $CONTAINER_USER
 
-# --
-# download/prepare newest mysql connector
-# --
+RUN apk add --update -f fc-cache update-ms-fonts ca-certificates gzip curl tar xmlstarlet msttcorefonts-installer ttf-dejavu fontconfig ghostscript graphviz motif wget update-ms-fonts && \
+    fc-cache -f && update-ms-fonts && \
+    /usr/glibc-compat/bin/localedef -i ${LANG_LANGUAGE}_${LANG_COUNTRY} -f UTF-8 ${LANG_LANGUAGE}_${LANG_COUNTRY}.UTF-8
 
+RUN wget -q -O /tmp/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz && \
+    tar xzf /tmp/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz --strip-components=1 -C ${CONF_INSTALL} && \
+    echo "confluence.home=${CONF_HOME}" > ${CONF_INSTALL}/confluence/WEB-INF/classes/confluence-init.properties
 
-# --
-# download/prepare confluence
-# --
-RUN set -e && \
-    mkdir -p  ${CONFLUENCE_HOME} \
-              ${CONFLUENCE_INSTALL_DIR}/conf \
-              ${CONFLUENCE_INSTALL_DIR}/lib \
-              ${CONFLUENCE_INSTALL_DIR}/confluence/WEB-INF/lib \
-              /home/confluence && \
-    curl -L --progress-bar "${CONFLUENCE_DOWNLOAD_URL}/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz" | tar -xz --strip-components=1 -C "${CONFLUENCE_INSTALL_DIR}"
+RUN rm -f ${CONF_INSTALL}/lib/mysql-connector-java*.jar && \
+    wget -q -O /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz && \
+    tar xzf /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz -C /tmp && \
+    cp /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}/mysql-connector-java-${MYSQL_DRIVER_VERSION}-bin.jar ${CONF_INSTALL}/lib/mysql-connector-java-${MYSQL_DRIVER_VERSION}-bin.jar
 
-# --
-# copy main entrypoint script to root path
-# --
-
-RUN set -e && \
-    export KEYSTORE=$JAVA_HOME/jre/lib/security/cacerts && \
+RUN export KEYSTORE=$JAVA_HOME/jre/lib/security/cacerts && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x2-cross-signed.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x4-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx1 -file /tmp/letsencryptauthorityx1.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx2 -file /tmp/letsencryptauthorityx2.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx1 -file /tmp/lets-encrypt-x1-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx2 -file /tmp/lets-encrypt-x2-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx3 -file /tmp/lets-encrypt-x3-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der && \
-    wget -O /SSLPoke.class https://confluence.atlassian.com/kb/files/779355358/779355357/1/1441897666313/SSLPoke.class
+    keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias isrgrootx1 -file /tmp/letsencryptauthorityx1.der && \
+    keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias isrgrootx2 -file /tmp/letsencryptauthorityx2.der && \
+    keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias letsencryptauthorityx1 -file /tmp/lets-encrypt-x1-cross-signed.der && \
+    keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias letsencryptauthorityx2 -file /tmp/lets-encrypt-x2-cross-signed.der && \
+    keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias letsencryptauthorityx3 -file /tmp/lets-encrypt-x3-cross-signed.der && \
+    keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der && \
+    wget -q -O /home/${CONTAINER_USER}/SSLPoke.class https://confluence.atlassian.com/kb/files/779355358/779355357/1/1441897666313/SSLPoke.class
 
-RUN set -e && \
-    rm -f ${CONFLUENCE_INSTALL_DIR}/lib/mysql-connector-java*.jar && \
-    curl -Ls "${JVM_MYSQL_CONNECTOR_URL}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz" | tar -xz --strip-components=1 -C "/tmp" && \
-    mv /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${CONFLUENCE_INSTALL_DIR}/confluence/WEB-INF/lib && \
-    cp -f ${CONFLUENCE_INSTALL_DIR}/confluence/WEB-INF/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${CONFLUENCE_INSTALL_DIR}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
-    sed -i -e 's/-Xms\([0-9]\+[kmg]\) -Xmx\([0-9]\+[kmg]\)/-Xms\${JVM_MINIMUM_MEMORY:=\1} -Xmx\${JVM_MAXIMUM_MEMORY:=\2} \${JVM_SUPPORT_RECOMMENDED_ARGS} -Dconfluence.home=\${CONFLUENCE_HOME}/g' ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh && \
-    chown -R ${RUN_USER}:${RUN_GROUP} /var/atlassian ${CONFLUENCE_INSTALL_DIR} && \
-    chmod -R 700 ${CONFLUENCE_HOME} ${CONFLUENCE_INSTALL_DIR} && \
-    apk del ca-certificates wget curl unzip tzdata msttcorefonts-installer && \
+RUN chown -R confluence:confluence /home/${CONTAINER_USER} ${CONF_INSTALL} ${CONF_HOME} && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
-# --
-# define container execution behaviour
-# --
 EXPOSE 8090 8091
 
-USER ${RUN_USER}
-COPY entrypoint.sh /entrypoint.sh
+USER confluence
 
-VOLUME ["${CONFLUENCE_HOME}"]
-WORKDIR ${CONFLUENCE_HOME}
-ENTRYPOINT ["/sbin/tini","--","/entrypoint.sh"]
+VOLUME ["/var/atlassian/confluence"]
 
+WORKDIR ${CONF_HOME}
+
+COPY docker-entrypoint.sh /home/confluence/docker-entrypoint.sh
+
+ENTRYPOINT ["/sbin/tini","--","/home/confluence/docker-entrypoint.sh"]
 CMD ["confluence"]

@@ -3,7 +3,7 @@
 # A helper script for ENTRYPOINT.
 #
 # If first CMD argument is 'confluence', then the script will bootstrap Confluence
-# If CMD argument is overridden and not 'confluence', then the user wants to run
+# If CMD argument is overriden and not 'confluence', then the user wants to run
 # his own process.
 
 set -o errexit
@@ -32,13 +32,13 @@ function enableCrowdSSO() {
     touch ${CROWD_PROPERTIES_FILE}
   fi
   if [ -n "${CROWD_SSO_APPLICATION_NAME}" ]; then
-    updateProperties ${CROWD_PROPERTIES_FILE} "application.name" ${CROWD_SSO_APPLICATION_NAME}
+    updateProperties ${CROWD_PROPERTIES_FILE} "application.name" "${CROWD_SSO_APPLICATION_NAME}"
   fi
   if [ -n "${CROWD_SSO_APPLICATION_PASSWORD}" ]; then
-    updateProperties ${CROWD_PROPERTIES_FILE} "application.password" ${CROWD_SSO_APPLICATION_PASSWORD}
+    updateProperties ${CROWD_PROPERTIES_FILE} "application.password" "${CROWD_SSO_APPLICATION_PASSWORD}"
   fi
   if [ -n "${CROWD_SSO_BASE_URL}" ]; then
-    updateProperties ${CROWD_PROPERTIES_FILE} "crowd.base.url" ${CROWD_SSO_BASE_URL}
+    updateProperties ${CROWD_PROPERTIES_FILE} "crowd.base.url" "${CROWD_SSO_BASE_URL}"
     updateProperties ${CROWD_PROPERTIES_FILE} "crowd.server.url" "${CROWD_SSO_BASE_URL}services/"
   fi
   if [ -n "${CROWD_SSO_SESSION_VALIDATION}" ]; then
@@ -79,7 +79,7 @@ function controlCrowdSSO() {
 }
 
 function createConfluenceTempDirectory() {
-  CONFLUENCE_CATALINA_TMPDIR=${CONFLUENCE_HOME}/temp
+  CONFLUENCE_CATALINA_TMPDIR=${CONF_HOME}/temp
 
   if [ -n "${CATALINA_TMPDIR}" ]; then
     CONFLUENCE_CATALINA_TMPDIR=$CATALINA_TMPDIR
@@ -103,57 +103,57 @@ function processConfluenceLogfileSettings() {
 
 function processConfluenceProxySettings() {
   if [ -n "${CONFLUENCE_PROXY_NAME}" ]; then
-    xmlstarlet ed -P -S -L --insert "//Connector[not(@proxyName)]" --type attr -n proxyName --value "${CONFLUENCE_PROXY_NAME}" ${CONFLUENCE_INSTALL_DIR}/conf/server.xml
+    xmlstarlet ed -P -S -L --insert "//Connector[not(@proxyName)]" --type attr -n proxyName --value "${CONFLUENCE_PROXY_NAME}" ${CONF_INSTALL}/conf/server.xml
   fi
 
   if [ -n "${CONFLUENCE_PROXY_PORT}" ]; then
-    xmlstarlet ed -P -S -L --insert "//Connector[not(@proxyPort)]" --type attr -n proxyPort --value "${CONFLUENCE_PROXY_PORT}" ${CONFLUENCE_INSTALL_DIR}/conf/server.xml
+    xmlstarlet ed -P -S -L --insert "//Connector[not(@proxyPort)]" --type attr -n proxyPort --value "${CONFLUENCE_PROXY_PORT}" ${CONF_INSTALL}/conf/server.xml
   fi
 
   if [ -n "${CONFLUENCE_PROXY_SCHEME}" ]; then
-    xmlstarlet ed -P -S -L --insert "//Connector[not(@scheme)]" --type attr -n scheme --value "${CONFLUENCE_PROXY_SCHEME}" ${CONFLUENCE_INSTALL_DIR}/conf/server.xml
+    xmlstarlet ed -P -S -L --insert "//Connector[not(@scheme)]" --type attr -n scheme --value "${CONFLUENCE_PROXY_SCHEME}" ${CONF_INSTALL}/conf/server.xml
   fi
 }
 
 function processContextPath() {
   if [ -n "${CONFLUENCE_CONTEXT_PATH}" ]; then
-    xmlstarlet ed -P -S -L --update "//Context[contains(@docBase,'../confluence')]/@path" --value "${CONFLUENCE_CONTEXT_PATH}" ${CONFLUENCE_INSTALL_DIR}/conf/server.xml
+    xmlstarlet ed -P -S -L --update "//Context[contains(@docBase,'../confluence')]/@path" --value "${CONFLUENCE_CONTEXT_PATH}" ${CONF_INSTALL}/conf/server.xml
   fi
 }
 
 function relayConfluenceLogFiles() {
   TARGET_PROPERTY=1catalina.org.apache.juli.AsyncFileHandler.directory
-  sed -i "/${TARGET_PROPERTY}/d" ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
-  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
+  sed -i "/${TARGET_PROPERTY}/d" ${CONF_INSTALL}/conf/logging.properties
+  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONF_INSTALL}/conf/logging.properties
   TARGET_PROPERTY=2localhost.org.apache.juli.AsyncFileHandler.directory
-  sed -i "/${TARGET_PROPERTY}/d" ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
-  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
+  sed -i "/${TARGET_PROPERTY}/d" ${CONF_INSTALL}/conf/logging.properties
+  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONF_INSTALL}/conf/logging.properties
   TARGET_PROPERTY=3manager.org.apache.juli.AsyncFileHandler.directory
-  sed -i "/${TARGET_PROPERTY}/d" ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
-  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
+  sed -i "/${TARGET_PROPERTY}/d" ${CONF_INSTALL}/conf/logging.properties
+  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONF_INSTALL}/conf/logging.properties
   TARGET_PROPERTY=4host-manager.org.apache.juli.AsyncFileHandler.directory
-  sed -i "/${TARGET_PROPERTY}/d" ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
-  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONFLUENCE_INSTALL_DIR}/conf/logging.properties
+  sed -i "/${TARGET_PROPERTY}/d" ${CONF_INSTALL}/conf/logging.properties
+  echo "${TARGET_PROPERTY} = ${confluence_logfile}" >> ${CONF_INSTALL}/conf/logging.properties
 }
 
 function setConfluenceConfigurationProperty() {
   local configurationProperty=$1
   local configurationValue=$2
   if [ -n "${configurationProperty}" ]; then
-    local propertyCount=$(xmlstarlet sel -t -v "count(//property[@name='${configurationProperty}'])" ${CONFLUENCE_HOME}/confluence.cfg.xml)
+    local propertyCount=$(xmlstarlet sel -t -v "count(//property[@name='${configurationProperty}'])" ${CONF_HOME}/confluence.cfg.xml)
     if [ "${propertyCount}" = '0' ]; then
       # Element does not exist, we insert new property
-      xmlstarlet ed --pf --inplace --subnode '//properties' --type elem --name 'property' --value "${configurationValue}" -i '//properties/property[not(@name)]' --type attr --name 'name' --value "${configurationProperty}" ${CONFLUENCE_HOME}/confluence.cfg.xml
+      xmlstarlet ed --pf --inplace --subnode '//properties' --type elem --name 'property' --value "${configurationValue}" -i '//properties/property[not(@name)]' --type attr --name 'name' --value "${configurationProperty}" ${CONF_HOME}/confluence.cfg.xml
     else
       # Element exists, we update the existing property
-      xmlstarlet ed --pf --inplace --update "//property[@name='${configurationProperty}']" --value "${configurationValue}" ${CONFLUENCE_HOME}/confluence.cfg.xml
+      xmlstarlet ed --pf --inplace --update "//property[@name='${configurationProperty}']" --value "${configurationValue}" ${CONF_HOME}/confluence.cfg.xml
     fi
   fi
 }
 
 function processConfluenceConfigurationSettings() {
   local counter=1
-  if [ -f "${CONFLUENCE_HOME}/confluence.cfg.xml" ]; then
+  if [ -f "${CONF_HOME}/confluence.cfg.xml" ]; then
     for (( counter=1; ; counter++ ))
     do
       VAR_CONFLUENCE_CONFIG_PROPERTY="CONFLUENCE_CONFIG_PROPERTY$counter"
@@ -167,9 +167,9 @@ function processConfluenceConfigurationSettings() {
 }
 
 function processCatalinaDefaultConfiguration() {
-  if [ -f "${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh" ]; then
-    sed -i "/export CATALINA_OPTS/d" ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
-    sed -i "/CATALINA_OPTS=/d" ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
+  if [ -f "${CONF_INSTALL}/bin/setenv.sh" ]; then
+    sed -i "/export CATALINA_OPTS/d" ${CONF_INSTALL}/bin/setenv.sh
+    sed -i "/CATALINA_OPTS=/d" ${CONF_INSTALL}/bin/setenv.sh
     echo 'CATALINA_OPTS="-Dconfluence.document.conversion.fontpath=/usr/share/fonts/truetype/msttcorefonts ${CATALINA_OPTS}"
 CATALINA_OPTS="-XX:-PrintGCDetails ${CATALINA_OPTS}"
 CATALINA_OPTS="-XX:+PrintGCDateStamps ${CATALINA_OPTS}"
@@ -187,8 +187,8 @@ CATALINA_OPTS="-XX:+UseG1GC ${CATALINA_OPTS}"
 CATALINA_OPTS="${START_CONFLUENCE_JAVA_OPTS} ${CATALINA_OPTS}"
 CATALINA_OPTS="-Dsynchrony.enable.xhr.fallback=true ${CATALINA_OPTS}"
 CATALINA_OPTS="-Dorg.apache.tomcat.websocket.DEFAULT_BUFFER_SIZE=32768 ${CATALINA_OPTS}"
-CATALINA_OPTS="-Dconfluence.context.path=${CONFLUENCE_CONTEXT_PATH} ${CATALINA_OPTS}"' >> ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
-    echo "export CATALINA_OPTS" >> ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
+CATALINA_OPTS="-Dconfluence.context.path=${CONFLUENCE_CONTEXT_PATH} ${CATALINA_OPTS}"' >> ${CONF_INSTALL}/bin/setenv.sh
+    echo "export CATALINA_OPTS" >> ${CONF_INSTALL}/bin/setenv.sh
   fi
 }
 
@@ -197,13 +197,13 @@ function setCatalinaConfigurationProperty() {
   local configurationValue=$2
   local catalinaproperty=""
   if [ -n "${configurationProperty}" ]; then
-    sed -i "/${configurationProperty}/d" ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
+    sed -i "/${configurationProperty}/d" ${CONF_INSTALL}/bin/setenv.sh
     catalinaproperty="CATALINA_OPTS=\""${configurationProperty}
     if [ -n "${configurationValue}" ]; then
       catalinaproperty=${catalinaproperty}${configurationValue}
     fi
     catalinaproperty=${catalinaproperty}" "'${CATALINA_OPTS}'"\""
-    echo ${catalinaproperty} >> ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
+    echo ${catalinaproperty} >> ${CONF_INSTALL}/bin/setenv.sh
   fi
 }
 
@@ -212,8 +212,8 @@ function processCatalinaConfigurationSettings() {
   local VAR_CATALINA_PARAMETER="CATALINA_PARAMETER1"
   local VAR_CATALINA_PARAMETER_VALUE="CATALINA_PARAMETER_VALUE1"
   if [ -n "${!VAR_CATALINA_PARAMETER}" ]; then
-    if [ -f "${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh" ]; then
-      sed -i "/export CATALINA_OPTS/d" ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
+    if [ -f "${CONF_INSTALL}/bin/setenv.sh" ]; then
+      sed -i "/export CATALINA_OPTS/d" ${CONF_INSTALL}/bin/setenv.sh
       for (( counter=1; ; counter++ ))
       do
         VAR_CATALINA_PARAMETER="CATALINA_PARAMETER$counter"
@@ -223,7 +223,7 @@ function processCatalinaConfigurationSettings() {
         fi
         setCatalinaConfigurationProperty ${!VAR_CATALINA_PARAMETER} ${!VAR_CATALINA_PARAMETER_VALUE}
       done
-      echo "export CATALINA_OPTS" >> ${CONFLUENCE_INSTALL_DIR}/bin/setenv.sh
+      echo "export CATALINA_OPTS" >> ${CONF_INSTALL}/bin/setenv.sh
     fi
   fi
 }
@@ -259,7 +259,7 @@ fi
 
 if [ "$1" = 'confluence' ]; then
   source /usr/bin/dockerwait
-  exec ${CONFLUENCE_INSTALL_DIR}/bin/start-confluence.sh -fg
+  exec ${CONF_INSTALL}/bin/start-confluence.sh -fg
 else
   exec "$@"
 fi
